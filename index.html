@@ -49,11 +49,49 @@
         width: 80%;
         max-width: 960px;
         margin: 40px auto;
-        background: linear-gradient(135deg, #1f1f1f, #2d2d4d);
+        background: rgba(31, 31, 31, 0.6);
         color: #eee;
         border-radius: 12px;
         padding: 2.5em;
         box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        position: relative;
+      }
+
+      #minimize-btn {
+        position: absolute;
+        top: 12px;
+        left: 16px;
+        font-size: 1.5em;
+        color: #ccc;
+        cursor: pointer;
+        background: none;
+        border: none;
+        z-index: 10;
+      }
+
+      #restore-btn {
+        position: fixed;
+        top: 10px;
+        right: 20px;
+        font-size: 1.2em;
+        background-color: rgba(50, 50, 50, 0.7);
+        color: #fff;
+        border: none;
+        padding: 0.5em 1em;
+        border-radius: 8px;
+        cursor: pointer;
+        display: none;
+        z-index: 999;
+      }
+
+      #info.hidden + #restore-btn {
+        display: block;
+      }
+
+      #info.hidden {
+        display: none;
       }
 
       #info h1 {
@@ -155,114 +193,96 @@
   <body>
     <canvas id="canvas"></canvas>
     <div id="info">
+      <button id="minimize-btn" onclick="toggleInfo()">−</button>
       <h1>Brady Strouse — My Developer Portfolio</h1>
-      <p>
-        This is a space where I share ideas, thoughts, and observations about
-        the world, technology, and personal growth. Like the dots floating
-        around in the background, everything is connected in ways we don't
-        always see right away.
-      </p>
+      <p>This is a space where I share ideas, thoughts, and observations about the world, technology, and personal growth. Like the dots floating around in the background, everything is connected in ways we don't always see right away.</p>
 
       <h2>Projects</h2>
       <div class="projects-grid">
         <div class="project-item" onclick="toggleDescription(this)">
           <strong>Jump King Clone</strong>
-          <p>
-            Java-based recreation of Jump King with custom physics engine, GUI,
-            sprite management, and precision collision detection.
-          </p>
+          <p>Java-based recreation of Jump King with custom physics engine, GUI, sprite management, and precision collision detection.</p>
         </div>
         <div class="project-item" onclick="toggleDescription(this)">
           <strong>Custom Text-to-Speech AI</strong>
-          <p>
-            Python-based offline AI voice synthesizer with support for long
-            documents, privacy, GPU/CPU switching, and a user-friendly
-            interface.
-          </p>
+          <p>Python-based offline AI voice synthesizer with support for long documents, privacy, GPU/CPU switching, and a user-friendly interface.</p>
         </div>
         <div class="project-item" onclick="toggleDescription(this)">
           <strong>Custom Smart Calendar</strong>
+          <p>A smart calendar system that syncs tasks and events, highlights conflicts, and uses natural language parsing for quick understanding.</p>
           <p>
-            A smart calendar system that syncs tasks and events, highlights conflicts,
-            and uses natural language parsing for quick understanding.
-            <br />
-          </p>
-          <p>
-              <img src="calendar_image_dinner.png" alt="Smart Calendar Screenshot" style="margin-top:1em; border-radius:6px; width:30%; height:auto; display: inline-block; margin: 0 1%; vertical-align: top;">
-              <img src="calendar_image_today.png" alt="Smart Calendar Screenshot" style="margin-top:1em; border-radius:6px; width:30%; height:auto; display: inline-block; margin: 0 1%; vertical-align: top;">
-              <img src="calendar_image_train.png" alt="Smart Calendar Screenshot" style="margin-top:1em; border-radius:6px; width:30%; height:auto; display: inline-block; margin: 0 1%; vertical-align: top;">
+            <img src="calendar_image_dinner.png" alt="Smart Calendar Screenshot" style="margin-top: 1em; border-radius: 6px; width: 30%; height: auto; display: inline-block; margin: 0 1%; vertical-align: top;" />
+            <img src="calendar_image_today.png" alt="Smart Calendar Screenshot" style="margin-top: 1em; border-radius: 6px; width: 30%; height: auto; display: inline-block; margin: 0 1%; vertical-align: top;" />
+            <img src="calendar_image_train.png" alt="Smart Calendar Screenshot" style="margin-top: 1em; border-radius: 6px; width: 30%; height: auto; display: inline-block; margin: 0 1%; vertical-align: top;" />
           </p>
         </div>
         <div class="project-item" onclick="toggleDescription(this)">
           <strong>Multiplayer Museum Tour Software</strong>
-          <p>
-            Worked in a scrum team on frontend/backend for museum software with
-            location tracking, multiplayer, and optimized animations.
-          </p>
+          <p>Worked in a scrum team on frontend/backend for museum software with location tracking, multiplayer, and optimized animations.</p>
         </div>
       </div>
 
       <h2>Skills</h2>
       <div class="skills-grid">
-        <div class="skill-item">
-          <strong>Fluent Languages:</strong> C++, Python, Java, JavaScript
-        </div>
+        <div class="skill-item"><strong>Fluent Languages:</strong> C++, Python, Java, JavaScript</div>
         <div class="skill-item"><strong>Markup:</strong> HTML, CSS</div>
-        <div class="skill-item">
-          <strong>Frameworks:</strong> React, Node.js, Unreal Engine
-        </div>
-        <div class="skill-item">
-          <strong>Cloud:</strong> AWS (DynamoDB, S3, EC2, Beanstalk), Microsoft
-          Azure
-        </div>
+        <div class="skill-item"><strong>Frameworks:</strong> React, Node.js, Unreal Engine</div>
+        <div class="skill-item"><strong>Cloud:</strong> AWS (DynamoDB, S3, EC2, Beanstalk), Microsoft Azure</div>
       </div>
     </div>
-
+    <button id="restore-btn" onclick="restoreInfo()">Restore Portfolio</button>
     <script>
       function toggleDescription(element) {
         const isActive = element.classList.contains("active");
         document.querySelectorAll(".project-item").forEach((item) => item.classList.remove("active"));
         if (!isActive) element.classList.add("active");
       }
-
+      function toggleInfo() {
+        const info = document.getElementById("info");
+        info.classList.add("hidden");
+        document.getElementById("restore-btn").style.display = "block";
+      }
+      function restoreInfo() {
+        const info = document.getElementById("info");
+        info.classList.remove("hidden");
+        document.getElementById("restore-btn").style.display = "none";
+      }
       window.addEventListener("DOMContentLoaded", () => {
         const maxMobileDots = 100;
         const isMobile = window.innerWidth <= 1000;
-        const maxDots = isMobile ? maxMobileDots : 600;
-
+        const maxDots = isMobile ? maxMobileDots : 800;
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
-        if (!ctx) return console.error("Canvas rendering context not available");
+        if (!ctx) return;
         let width = (canvas.width = window.innerWidth);
         let height = (canvas.height = window.innerHeight);
-
         window.addEventListener("resize", () => {
           width = canvas.width = window.innerWidth;
           height = canvas.height = window.innerHeight;
         });
-
         const dots = [];
         const mouse = { x: null, y: null };
         const wrapBuffer = 50;
-        let dotCount = Math.min(400, maxDots);
-
+        let dotCount = Math.min(100, maxDots);
+        let directionDeg = 0;
+        const directionModifier = 0.01;
+        const directionChange = 0.00005;
+        let frameTimes = [];
         window.addEventListener("mousemove", (e) => {
           mouse.x = e.clientX;
           mouse.y = e.clientY;
         });
-
         function randomColor() {
           const hue = Math.floor(Math.random() * 360);
           return `rgb(80,${0 + hue * 0.5},${hue + 200})`;
         }
-
         function circlePoint(radius, deg) {
           let rad = deg * (Math.PI / 180);
-          let x = radius * Math.cos(rad);
-          let y = radius * Math.sin(rad);
-          return { x, y };
+          return {
+            x: radius * Math.cos(rad),
+            y: radius * Math.sin(rad),
+          };
         }
-
         for (let i = 0; i < dotCount; i++) {
           dots.push({
             x: Math.random() * width,
@@ -272,16 +292,10 @@
             color: randomColor(),
           });
         }
-
-        let frameTimes = [];
-        let directionDeg = 0;
-        const directionModifier = 0.005;
-
         function draw() {
           ctx.clearRect(0, 0, width, height);
           for (let i = 0; i < dots.length; i++) {
             const dot = dots[i];
-
             if (mouse.x !== null && mouse.y !== null) {
               const dx = dot.x - mouse.x;
               const dy = dot.y - mouse.y;
@@ -293,11 +307,9 @@
                 dot.vy += Math.sin(angle) * force * 0.5;
               }
             }
-
             for (let j = 0; j < dots.length; j++) {
               if (i === j) continue;
               const other = dots[j];
-              if (!other) continue;
               const dx = dot.x - other.x;
               const dy = dot.y - other.y;
               const dist = Math.sqrt(dx * dx + dy * dy);
@@ -308,52 +320,42 @@
                 dot.vy += Math.sin(angle) * force * 0.05;
               }
             }
-
             ctx.beginPath();
             ctx.arc(dot.x, dot.y, 4.5, 0, Math.PI * 2);
             ctx.fillStyle = dot.color;
             ctx.fill();
-
             for (let j = i + 1; j < dots.length; j++) {
               const other = dots[j];
-              if (!other) continue;
               const dx = dot.x - other.x;
               const dy = dot.y - other.y;
               const dist = Math.sqrt(dx * dx + dy * dy);
-
               if (dist < 120) {
                 ctx.beginPath();
                 ctx.moveTo(dot.x, dot.y);
                 ctx.lineTo(other.x, other.y);
-                ctx.strokeStyle = "rgba(255, 255, 255," + (1 - dist / 120) + ")";
+                ctx.strokeStyle = `rgba(255, 255, 255, ${1 - dist / 120})`;
                 ctx.lineWidth = 0.5;
                 ctx.stroke();
               }
             }
-
-            dot.vx *= 0.99;
-            dot.vy *= 0.99;
-
-            dot.vx += circlePoint(1, directionDeg).x * directionModifier;
-            dot.vy += circlePoint(1, directionDeg).y * directionModifier;
-            directionDeg += 0.00005;
-
+            dot.vx *= 0.985;
+            dot.vy *= 0.985;
+            const dir = circlePoint(1, directionDeg);
+            dot.vx += dir.x * directionModifier;
+            dot.vy += dir.y * directionModifier;
+            directionDeg += directionChange;
             dot.x += dot.vx;
             dot.y += dot.vy;
-
             if (dot.x > width + wrapBuffer) dot.x = -wrapBuffer;
             if (dot.x < -wrapBuffer) dot.x = width + wrapBuffer;
-            if (dot.y < -wrapBuffer) dot.y = height + wrapBuffer;
             if (dot.y > height + wrapBuffer) dot.y = -wrapBuffer;
+            if (dot.y < -wrapBuffer) dot.y = height + wrapBuffer;
           }
-
           const now = performance.now();
           frameTimes.push(now);
           if (frameTimes.length > 60) frameTimes.shift();
-
           const avgFrameTime = (frameTimes[frameTimes.length - 1] - frameTimes[0]) / frameTimes.length;
           const fps = 1000 / avgFrameTime;
-
           if (fps < 50 && dots.length > 200) {
             dots.splice(-10);
           } else if (fps > 55 && dots.length < maxDots) {
@@ -367,10 +369,8 @@
               });
             }
           }
-
           requestAnimationFrame(draw);
         }
-
         draw();
       });
     </script>
