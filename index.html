@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Brady Strouse Portfolio</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", sans-serif;
+        color: #111;
+        min-height: 100vh;
+        width: 100vw;
+        overflow-x: hidden;
+        overflow-y: auto;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+        background-color: transparent;
+        box-shadow: none;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -2;
+        background: #000;
+        filter: none;
+        pointer-events: none;
+      }
+
+      #info {
+        width: 80%;
+        max-width: 960px;
+        margin: 40px auto;
+        background: linear-gradient(135deg, #1f1f1f, #2d2d4d);
+        color: #eee;
+        border-radius: 12px;
+        padding: 2.5em;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+      }
+
+      #info h1 {
+        font-size: 2.8rem;
+        margin-bottom: 0.8em;
+        background: linear-gradient(to right, #4facfe, #00f2fe);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      #info h2 {
+        margin-top: 2em;
+        font-size: 1.6rem;
+        color: #4facfe;
+      }
+
+      #info p {
+        line-height: 1.8;
+        font-size: 1.15rem;
+        color: #ccc;
+      }
+
+      .projects-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5em;
+        margin-top: 2em;
+      }
+
+      .project-item {
+        cursor: pointer;
+        background: linear-gradient(135deg, #2c2c2c, #3a3a5c);
+        padding: 1.5em;
+        border-radius: 10px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        color: #fff;
+      }
+
+      .project-item:hover {
+        transform: scale(1.01);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+      }
+
+      .project-item p {
+        margin-top: 0.5em;
+        overflow: hidden;
+        max-height: 0;
+        transition: max-height 0.4s ease, opacity 0.4s ease;
+        opacity: 0;
+      }
+
+      .project-item.active p {
+        max-height: 500px;
+        opacity: 1;
+      }
+
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2em;
+        margin-top: 2.5em;
+      }
+
+      .skill-item {
+        background: linear-gradient(135deg, #333, #44486e);
+        color: #f1f1f1;
+        padding: 1.5em;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <div id="info">
+      <h1>Brady Strouse — My Developer Portfolio</h1>
+      <p>This is a space where I share ideas, thoughts, and observations about the world, technology, and personal growth. Like the dots floating around in the background, everything is connected in ways we don't always see right away.</p>
+      <h2>Professional Experience</h2>
+      <div class="projects-grid">
+        <div class="project-item" onclick="toggleDescription(this)">
+          <strong>Meditation App</strong>
+          <p>Designed and implemented a cross-platform meditation app as part of my job, featuring guided sessions, user progress tracking, and soothing audio-visual feedback for enhanced user experience.</p>
+        </div>
+        <div class="project-item" onclick="toggleDescription(this)">
+          <strong>Multiplayer Museum Tour Software</strong>
+          <p>Professional project developed as part of my job. Worked in a scrum team on frontend/backend for museum software with location tracking, multiplayer support, and optimized animations.</p>
+        </div>
+      </div>
+      <h2>Projects</h2>
+      <div class="projects-grid">
+        <div class="project-item" onclick="toggleDescription(this)">
+          <strong>Jump King Clone</strong>
+          <p>Java-based recreation of Jump King with custom physics engine, GUI, sprite management, and precision collision detection.</p>
+        </div>
+        <div class="project-item" onclick="toggleDescription(this)">
+          <strong>Custom Text-to-Speech AI</strong>
+          <p>Python-based offline AI voice synthesizer with support for long documents, privacy, GPU/CPU switching, and a user-friendly interface.</p>
+        </div>
+        <div class="project-item" onclick="toggleDescription(this)">
+          <strong>Smart Calendar on Raspberry Pi</strong>
+          <p>Python app using Google Calendar API, real-time sync, time severity visuals, and automatic formatting, running 24/7 on a Pi.</p>
+        </div>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-item">
+          <strong>Fluent Languages:</strong> C++, Python, Java, JavaScript
+        </div>
+        <div class="skill-item"><strong>Markup:</strong> HTML, CSS</div>
+        <div class="skill-item">
+          <strong>Frameworks:</strong> React, Node.js, Unreal Engine
+        </div>
+        <div class="skill-item">
+          <strong>Cloud:</strong> AWS (DynamoDB, S3, EC2, Beanstalk), Microsoft Azure
+        </div>
+      </div>
+    </div>
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return console.error("Canvas rendering context not available");
+        let width = (canvas.width = window.innerWidth);
+        let height = (canvas.height = window.innerHeight);
+
+        window.addEventListener("resize", () => {
+          width = canvas.width = window.innerWidth;
+          height = canvas.height = window.innerHeight;
+        });
+
+        let dotCount = 500;
+        const dots = [];
+        const mouse = { x: null, y: null };
+        const wrapBuffer = 50;
+        let directionDeg = 0;
+        const directionModifier = 0.005;
+
+        window.addEventListener("mousemove", (e) => {
+          mouse.x = e.clientX;
+          mouse.y = e.clientY;
+        });
+
+        function randomColor() {
+          const hue = Math.floor(Math.random() * 360);
+          return `rgb(80,${0 + hue * 0.5},${hue + 200})`;
+        }
+
+        function circlePoint(radius, deg) {
+          let rad = deg * (Math.PI / 180);
+          return { x: radius * Math.cos(rad), y: radius * Math.sin(rad) };
+        }
+
+        for (let i = 0; i < dotCount; i++) {
+          dots.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: 0.3 + Math.random() * 0.2,
+            vy: -0.3 - Math.random() * 0.2,
+            color: randomColor()
+          });
+        }
+
+        let frameTimes = [];
+        function draw() {
+          ctx.clearRect(0, 0, width, height);
+          for (let i = 0; i < dots.length; i++) {
+            const dot = dots[i];
+
+            if (mouse.x !== null && mouse.y !== null) {
+              const dx = dot.x - mouse.x;
+              const dy = dot.y - mouse.y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist < 100) {
+                const force = (100 - dist) / 100;
+                const angle = Math.atan2(dy, dx);
+                dot.vx += Math.cos(angle) * force * 0.5;
+                dot.vy += Math.sin(angle) * force * 0.5;
+              }
+            }
+
+            for (let j = 0; j < dots.length; j++) {
+              if (i === j) continue;
+              const other = dots[j];
+              if (!other) continue;
+              const dx = dot.x - other.x;
+              const dy = dot.y - other.y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist > 0 && dist < 50) {
+                const force = (50 - dist) / 25;
+                const angle = Math.atan2(dy, dx);
+                dot.vx += Math.cos(angle) * force * 0.05;
+                dot.vy += Math.sin(angle) * force * 0.05;
+              }
+            }
+
+            ctx.beginPath();
+            ctx.arc(dot.x, dot.y, 4.5, 0, Math.PI * 2);
+            ctx.fillStyle = dot.color;
+            ctx.fill();
+
+            for (let j = i + 1; j < dots.length; j++) {
+              const other = dots[j];
+              if (!other) continue;
+              const dx = dot.x - other.x;
+              const dy = dot.y - other.y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist < 120) {
+                ctx.beginPath();
+                ctx.moveTo(dot.x, dot.y);
+                ctx.lineTo(other.x, other.y);
+                ctx.strokeStyle = `rgba(255, 255, 255,${1 - dist / 120})`;
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+              }
+            }
+
+            dot.vx *= 0.99;
+            dot.vy *= 0.99;
+            const dir = circlePoint(1, directionDeg);
+            dot.vx += dir.x * directionModifier;
+            dot.vy += dir.y * directionModifier;
+            directionDeg += 0.00005;
+
+            dot.x += dot.vx;
+            dot.y += dot.vy;
+
+            if (dot.x > width + wrapBuffer) dot.x = -wrapBuffer;
+            if (dot.x < -wrapBuffer) dot.x = width + wrapBuffer;
+            if (dot.y < -wrapBuffer) dot.y = height + wrapBuffer;
+            if (dot.y > height + wrapBuffer) dot.y = -wrapBuffer;
+          }
+
+          const now = performance.now();
+          frameTimes.push(now);
+          if (frameTimes.length > 60) frameTimes.shift();
+
+          const avgFrameTime = (frameTimes[frameTimes.length - 1] - frameTimes[0]) / frameTimes.length;
+          const fps = 1000 / avgFrameTime;
+
+          if (fps < 50 && dots.length > 200) {
+            dots.splice(-10);
+          } else if (fps > 55 && dots.length < 600) {
+            for (let i = 0; i < 10; i++) {
+              dots.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                vx: 0.3 + Math.random() * 0.2,
+                vy: -0.3 - Math.random() * 0.2,
+                color: randomColor()
+              });
+            }
+          }
+
+          requestAnimationFrame(draw);
+        }
+
+        draw();
+      });
+
+      function toggleDescription(element) {
+        const isActive = element.classList.contains("active");
+        document.querySelectorAll(".project-item").forEach((item) => item.classList.remove("active"));
+        if (!isActive) element.classList.add("active");
+      }
+    </script>
+  </body>
+</html>
