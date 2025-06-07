@@ -181,10 +181,16 @@
           </p>
         </div>
         <div class="project-item" onclick="toggleDescription(this)">
-          <strong>Smart Calendar on Raspberry Pi</strong>
+          <strong>Custom Smart Calendar</strong>
           <p>
-            Python app using Google Calendar API, real-time sync, time severity
-            visuals, and automatic formatting, running 24/7 on a Pi.
+            A smart calendar system that syncs tasks and events, highlights conflicts,
+            and uses natural language parsing for quick understanding.
+            <br />
+          </p>
+          <p>
+              <img src="calendar_image_dinner.png" alt="Smart Calendar Screenshot" style="margin-top:1em; border-radius:6px; width:30%; height:auto; display: inline-block; margin: 0 1%; vertical-align: top;">
+              <img src="calendar_image_today.png" alt="Smart Calendar Screenshot" style="margin-top:1em; border-radius:6px; width:30%; height:auto; display: inline-block; margin: 0 1%; vertical-align: top;">
+              <img src="calendar_image_train.png" alt="Smart Calendar Screenshot" style="margin-top:1em; border-radius:6px; width:30%; height:auto; display: inline-block; margin: 0 1%; vertical-align: top;">
           </p>
         </div>
         <div class="project-item" onclick="toggleDescription(this)">
@@ -237,7 +243,6 @@
 
         const dots = [];
         const mouse = { x: null, y: null };
-
         const wrapBuffer = 50;
         let dotCount = Math.min(400, maxDots);
 
