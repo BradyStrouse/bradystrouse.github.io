@@ -1,0 +1,310 @@
+/* === Global Reset === */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", sans-serif;
+  color: #111;
+  min-height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2;
+  background: #000;
+  filter: none;
+  pointer-events: none;
+}
+
+/* === Info Section === */
+#info {
+  width: 80%;
+  max-width: 960px;
+  margin: 40px auto;
+  background: rgba(31, 31, 31, 0.6);
+  color: #eee;
+  border-radius: 12px;
+  padding: 2.5em;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: relative;
+}
+
+#minimize-btn {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  font-size: 1.5em;
+  color: #ccc;
+  cursor: pointer;
+  background: none;
+  border: none;
+  z-index: 10;
+}
+
+#restore-btn {
+  position: fixed;
+  top: 10px;
+  right: 20px;
+  font-size: 1.2em;
+  background-color: rgba(50, 50, 50, 0.7);
+  color: #fff;
+  border: none;
+  padding: 0.5em 1em;
+  border-radius: 8px;
+  cursor: pointer;
+  display: none;
+  z-index: 999;
+}
+
+#info.hidden + #restore-btn {
+  display: block;
+}
+
+#info.hidden {
+  display: none;
+}
+
+#info h1 {
+  font-size: 2.8rem;
+  margin-bottom: 0.8em;
+  background: linear-gradient(to right, #4facfe, #00f2fe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#info h2 {
+  margin-top: 2em;
+  font-size: 1.6rem;
+  color: #4facfe;
+}
+
+#info p {
+  line-height: 1.8;
+  font-size: 1.15rem;
+  color: #ccc;
+}
+
+/* === Projects === */
+.projects-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  margin-top: 2em;
+}
+
+.project-item {
+  cursor: pointer;
+  background: linear-gradient(135deg, #2c2c2c, #3a3a5c);
+  padding: 1.5em;
+  border-radius: 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: #fff;
+  width: 100%;
+}
+
+.project-item:hover {
+  transform: scale(1.01);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Smooth dropdown animation */
+.project-description {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: max-height 0.4s ease, opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.project-item.active .project-description {
+  max-height: 1000px;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Hide images by default in collapsed state */
+.project-description img {
+  display: block;
+  max-width: 100%;
+  align-self: center;
+  height: 0;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, height 0.4s ease, margin 0.4s ease;
+}
+
+.project-item.active .project-description img {
+  height: 100%;
+  margin-top: 1em;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.image-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1%;
+  margin-top: 1%;
+}
+
+.image-row img {
+  flex: 1 1 calc(33.333% - 1em);
+  max-width: 30%;
+  height: auto;
+  border-radius: 6px;
+  transition: transform 0.3s ease;
+}
+
+/* Fix overflow behavior */
+.project-item * {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* === Audio Styling === */
+.audio-wrapper {
+  width: 100%;
+  background: rgba(10, 30, 60, 0.8);
+  border: 2px solid #007bff;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 1em;
+  box-shadow: 0 4px 14px rgba(0, 123, 255, 0.3);
+}
+
+.audio-wrapper audio {
+  width: 100%;
+  max-width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  filter: brightness(1.1) contrast(1.05);
+  display: block;
+}
+
+/* === Skills === */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2em;
+  margin-top: 2.5em;
+}
+
+.skill-item {
+  background: linear-gradient(135deg, #333, #44486e);
+  color: #f1f1f1;
+  padding: 1.5em;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+/* === Video Styling === */
+.video-wrapper {
+  max-width: 640px;
+  margin: 2em auto;
+  border: 2px solid #007BFF;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+}
+
+.video-wrapper video {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: black; /* fallback if video fails */
+}
+
+/* === Physics Controls === */
+#controls {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 1em;
+  border-radius: 0 0 12px 12px;
+  z-index: 1000;
+  font-size: 0.9em;
+  backdrop-filter: blur(5px);
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 0.5em 1em;
+}
+
+#controls label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5em;
+  font-size: 0.95em;
+  white-space: nowrap;
+}
+
+#controls input[type="range"] {
+  width: 120px;
+}
+
+/* === Responsive to mobile === */
+@media (max-width: 768px) {
+  #info {
+    width: 95%;
+    padding: 1.5em;
+  }
+
+  #info h1 {
+    font-size: 2rem;
+  }
+
+  #info h2 {
+    font-size: 1.3rem;
+  }
+
+  #info p,
+  .project-description,
+  .skill-item {
+    font-size: 1rem;
+  }
+
+  .skill-item {
+    padding: 1em;
+  }
+
+  #controls {
+    grid-template-columns: 1fr;
+    width: 100%;
+    left: 0;
+    right: 0;
+    border-radius: 0;
+  }
+}

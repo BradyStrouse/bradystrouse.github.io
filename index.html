@@ -4,375 +4,252 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Brady Strouse Portfolio</title>
-    <style>
-      * {
-        box-sizing: border-box;
-      }
-
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-        font-family: "Segoe UI", sans-serif;
-        color: #111;
-        min-height: 100vh;
-        width: 100vw;
-        overflow-x: hidden;
-        overflow-y: auto;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        flex-direction: column;
-        background-color: transparent;
-        box-shadow: none;
-      }
-
-      body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-
-      canvas {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: -2;
-        background: #000;
-        filter: none;
-        pointer-events: none;
-      }
-
-      #info {
-        width: 80%;
-        max-width: 960px;
-        margin: 40px auto;
-        background: rgba(31, 31, 31, 0.6);
-        color: #eee;
-        border-radius: 12px;
-        padding: 2.5em;
-        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        position: relative;
-      }
-
-      #minimize-btn {
-        position: absolute;
-        top: 12px;
-        left: 16px;
-        font-size: 1.5em;
-        color: #ccc;
-        cursor: pointer;
-        background: none;
-        border: none;
-        z-index: 10;
-      }
-
-      #restore-btn {
-        position: fixed;
-        top: 10px;
-        right: 20px;
-        font-size: 1.2em;
-        background-color: rgba(50, 50, 50, 0.7);
-        color: #fff;
-        border: none;
-        padding: 0.5em 1em;
-        border-radius: 8px;
-        cursor: pointer;
-        display: none;
-        z-index: 999;
-      }
-
-      #info.hidden + #restore-btn {
-        display: block;
-      }
-
-      #info.hidden {
-        display: none;
-      }
-
-      #info h1 {
-        font-size: 2.8rem;
-        margin-bottom: 0.8em;
-        background: linear-gradient(to right, #4facfe, #00f2fe);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-
-      #info h2 {
-        margin-top: 2em;
-        font-size: 1.6rem;
-        color: #4facfe;
-      }
-
-      #info p {
-        line-height: 1.8;
-        font-size: 1.15rem;
-        color: #ccc;
-      }
-
-      .projects-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5em;
-        margin-top: 2em;
-      }
-
-      .project-item {
-        cursor: pointer;
-        background: linear-gradient(135deg, #2c2c2c, #3a3a5c);
-        padding: 1.5em;
-        border-radius: 10px;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        color: #fff;
-      }
-
-      .project-item:hover {
-        transform: scale(1.01);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-      }
-
-      .project-item p {
-        margin-top: 0.5em;
-        overflow: hidden;
-        max-height: 0;
-        transition: max-height 0.4s ease, opacity 0.4s ease;
-        opacity: 0;
-      }
-
-      .project-item.active p {
-        max-height: 500px;
-        opacity: 1;
-      }
-
-      .skills-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 2em;
-        margin-top: 2.5em;
-      }
-
-      .skill-item {
-        background: linear-gradient(135deg, #333, #44486e);
-        color: #f1f1f1;
-        padding: 1.5em;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        text-align: center;
-      }
-
-      @media (max-width: 768px) {
-        #info {
-          width: 95%;
-          padding: 1.5em;
-        }
-
-        #info h1 {
-          font-size: 2rem;
-        }
-
-        #info h2 {
-          font-size: 1.3rem;
-        }
-
-        #info p,
-        .project-item p,
-        .skill-item {
-          font-size: 1rem;
-        }
-
-        .skill-item {
-          padding: 1em;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <canvas id="canvas"></canvas>
+
+    <details id="controls" close>
+      <summary
+        style="
+          cursor: pointer;
+          font-weight: bold;
+          color: white;
+          background: rgba(0, 0, 0, 0.6);
+          padding: 0.5em;
+          border-radius: 0 0 6px 6px;
+        "
+      >
+        Physics Controls
+      </summary>
+      <div style="padding: 0.5em">
+        <label>
+          Friction:
+          <input
+            type="range"
+            id="friction"
+            min=".7"
+            max=".99"
+            step="0.000001"
+            value="0.87"
+            style="direction: rtl"
+          />
+        </label>
+        <label>
+          Dot Repulsion:
+          <input
+            type="range"
+            id="repulsion"
+            min="0"
+            max="4"
+            step="0.01"
+            value="2"
+          />
+        </label>
+        <label>
+          Mouse Force:
+          <input
+            type="range"
+            id="mouseForce"
+            min="0"
+            max="25"
+            step="0.05"
+            value="15"
+          />
+        </label>
+        <label>
+          Base Speed:
+          <input
+            type="range"
+            id="directionModifier"
+            min="0"
+            max=".1"
+            step="0.01"
+            value="0.05"
+          />
+        </label>
+      </div>
+    </details>
+
     <div id="info">
       <button id="minimize-btn" onclick="toggleInfo()">−</button>
       <h1>Brady Strouse — My Developer Portfolio</h1>
-      <p>This is a space where I share ideas, thoughts, and observations about the world, technology, and personal growth. Like the dots floating around in the background, everything is connected in ways we don't always see right away.</p>
+      <p>
+        This is a space where I share ideas, thoughts, and observations about
+        the world, technology, and personal growth. Like the dots floating
+        around in the background, everything is connected in ways we don't
+        always see right away.
+      </p>
+      <h2>Professional Experience</h2>
+      <div class="projects-grid">
+        <!-- Museum for YETi -->
+        <div class="project-item" onclick="toggleDescription(this)">
+          <strong>Mutiplayer Museum Tour Software</strong>
+          <div class="project-description">
+            <p>
+              This was a very unique opperturnity to help create educational
+              software for the Grand Rapids Public Museum. I worked
+              collaboritvly on a team of about 4 people with modern tools to
+              create a Pokemon-Go-esque game where you go to different landmarks
+              across Grand Rapids and collect items that describe the history of
+              the area.
+            </p>
+            <p>
+              Personally, I worked on the location tracking, both front and
+              backend, every animation, as well as the main QA tester.
+            </p>
+            <img
+              src="Riverside storytelling.png"
+              alt="Screenshot of the product I've worked on"
+              style="
+                margin-top: 1em;
+                border-radius: 6px;
+                width: 90%;
+                height: auto;
+              "
+            />
+            <img
+              src="inside_museum.png"
+              alt="inside of the museum"
+              style="
+                margin-top: 1em;
+                border-radius: 6px;
+                width: 90%;
+                height: auto;
+              "
+            />
+          </div>
+        </div>
 
+        <div class="project-item" onclick="toggleDescription(this)">
+          <strong>Custom Physics Game</strong>
+          <div class="project-description">
+            <p>
+              This physics game is one that I am particularly proud of. I
+              utilized the Rapir API to create a custom level maker (as well as
+              an example game) that utilizes said different mechanics to make
+              you think in a unique way.
+            </p>
+            <p>
+              The video below shows off how the game works, you are given
+              multiple objects (the yellow boncy blocks in this example) and you
+              need to try and get the ball to the green goal box
+            </p>
+            <div class="video-wrapper">
+              <video controls muted poster>
+                <source src="Physics Example.mp4" type="video/mp4" />
+                You're browser does not support this video
+              </video>
+            </div>
+          </div>
+        </div>
+        <div class="project-item" onclick="toggleDescription(this)">
+          <strong>To-Do List (Now With AI!)</strong>
+          <div class="project-description">
+            <p>
+              I created a classic project while in between tasks at YETi, the
+              To-Do List. Except I needed something to keep it exciting. I
+              decided that I don't want to write down every step of the process,
+              just type in a general idea of what I am doing. So I created a
+              To-Do List that utalizes the ChatGPT API to breakdown a general
+              idea into specific tasks, as well as color coordinate seperate
+              tasks.
+            </p>
+            <div class="video-wrapper">
+              <video controls muted poster>
+                <source src="To-do-list.mp4" type="video/mp4" />
+                You're browser does not support this video
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
       <h2>Projects</h2>
       <div class="projects-grid">
-        <div class="project-item" onclick="toggleDescription(this)">
-          <strong>Jump King Clone</strong>
-          <p>Java-based recreation of Jump King with custom physics engine, GUI, sprite management, and precision collision detection.</p>
-        </div>
+        <!-- Text-to-Speech AI -->
         <div class="project-item" onclick="toggleDescription(this)">
           <strong>Custom Text-to-Speech AI</strong>
-          <p>Python-based offline AI voice synthesizer with support for long documents, privacy, GPU/CPU switching, and a user-friendly interface.</p>
+          <div class="project-description">
+            <p>
+              Python-based offline AI voice synthesizer with support for long
+              documents, privacy, GPU/CPU switching, and a user-friendly
+              interface.
+            </p>
+            <div class="audio-wrapper">
+              <audio controls>
+                <source src="output.wav" type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
+            </div>
+          </div>
         </div>
+        <!-- Jump King Clone -->
+        <div class="project-item" onclick="toggleDescription(this)">
+          <strong>Jump King Clone</strong>
+          <div class="project-description">
+            <p>
+              Java-based recreation of Jump King with custom physics engine,
+              GUI, sprite management, and precision collision detection.
+            </p>
+            <img
+              src="JumpKingSC.png"
+              alt="Jump King Screenshot"
+              style="
+                margin-top: 1em;
+                border-radius: 6px;
+                width: 50%;
+                height: auto;
+              "
+            />
+          </div>
+        </div>
+
+        <!-- Smart Calendar -->
         <div class="project-item" onclick="toggleDescription(this)">
           <strong>Custom Smart Calendar</strong>
-          <p>A smart calendar system that syncs tasks and events, highlights conflicts, and uses natural language parsing for quick understanding.</p>
-          <p>
-            <img src="calendar_image_dinner.png" alt="Smart Calendar Screenshot" style="margin-top: 1em; border-radius: 6px; width: 30%; height: auto; display: inline-block; margin: 0 1%; vertical-align: top;" />
-            <img src="calendar_image_today.png" alt="Smart Calendar Screenshot" style="margin-top: 1em; border-radius: 6px; width: 30%; height: auto; display: inline-block; margin: 0 1%; vertical-align: top;" />
-            <img src="calendar_image_train.png" alt="Smart Calendar Screenshot" style="margin-top: 1em; border-radius: 6px; width: 30%; height: auto; display: inline-block; margin: 0 1%; vertical-align: top;" />
-          </p>
+          <div class="project-description">
+            <p>
+              A smart calendar system that syncs tasks and events, highlights
+              conflicts, and uses natural language parsing for quick
+              understanding.
+            </p>
+            <div class="image-row">
+              <img src="calendar_image_dinner.png" alt="Calendar - Dinner" />
+              <img src="calendar_image_today.png" alt="Calendar - Today" />
+              <img src="calendar_image_train.png" alt="Calendar - Train" />
+            </div>
+          </div>
         </div>
+
+        <!-- Multiplayer Museum Software -->
         <div class="project-item" onclick="toggleDescription(this)">
           <strong>Multiplayer Museum Tour Software</strong>
-          <p>Worked in a scrum team on frontend/backend for museum software with location tracking, multiplayer, and optimized animations.</p>
+          <div class="project-description">
+            <p>
+              Worked in a scrum team on frontend/backend for museum software
+              with location tracking, multiplayer, and optimized animations.
+            </p>
+          </div>
         </div>
       </div>
 
       <h2>Skills</h2>
       <div class="skills-grid">
-        <div class="skill-item"><strong>Fluent Languages:</strong> C++, Python, Java, JavaScript</div>
+        <div class="skill-item">
+          <strong>Fluent Languages:</strong> C++, Python, Java, JavaScript
+        </div>
         <div class="skill-item"><strong>Markup:</strong> HTML, CSS</div>
-        <div class="skill-item"><strong>Frameworks:</strong> React, Node.js, Unreal Engine</div>
-        <div class="skill-item"><strong>Cloud:</strong> AWS (DynamoDB, S3, EC2, Beanstalk), Microsoft Azure</div>
+        <div class="skill-item">
+          <strong>Frameworks:</strong> React, Node.js, Unreal Engine
+        </div>
+        <div class="skill-item">
+          <strong>Cloud:</strong> AWS (DynamoDB, S3, EC2, Beanstalk), Microsoft
+          Azure
+        </div>
       </div>
     </div>
+
     <button id="restore-btn" onclick="restoreInfo()">Restore Portfolio</button>
-    <script>
-      function toggleDescription(element) {
-        const isActive = element.classList.contains("active");
-        document.querySelectorAll(".project-item").forEach((item) => item.classList.remove("active"));
-        if (!isActive) element.classList.add("active");
-      }
-      function toggleInfo() {
-        const info = document.getElementById("info");
-        info.classList.add("hidden");
-        document.getElementById("restore-btn").style.display = "block";
-      }
-      function restoreInfo() {
-        const info = document.getElementById("info");
-        info.classList.remove("hidden");
-        document.getElementById("restore-btn").style.display = "none";
-      }
-      window.addEventListener("DOMContentLoaded", () => {
-        const maxMobileDots = 100;
-        const isMobile = window.innerWidth <= 1000;
-        const maxDots = isMobile ? maxMobileDots : 800;
-        const canvas = document.getElementById("canvas");
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-        let width = (canvas.width = window.innerWidth);
-        let height = (canvas.height = window.innerHeight);
-        window.addEventListener("resize", () => {
-          width = canvas.width = window.innerWidth;
-          height = canvas.height = window.innerHeight;
-        });
-        const dots = [];
-        const mouse = { x: null, y: null };
-        const wrapBuffer = 50;
-        let dotCount = Math.min(100, maxDots);
-        let directionDeg = 0;
-        const directionModifier = 0.01;
-        const directionChange = 0.00005;
-        let frameTimes = [];
-        window.addEventListener("mousemove", (e) => {
-          mouse.x = e.clientX;
-          mouse.y = e.clientY;
-        });
-        function randomColor() {
-          const hue = Math.floor(Math.random() * 360);
-          return `rgb(80,${0 + hue * 0.5},${hue + 200})`;
-        }
-        function circlePoint(radius, deg) {
-          let rad = deg * (Math.PI / 180);
-          return {
-            x: radius * Math.cos(rad),
-            y: radius * Math.sin(rad),
-          };
-        }
-        for (let i = 0; i < dotCount; i++) {
-          dots.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            vx: 0.3 + Math.random() * 0.2,
-            vy: -0.3 - Math.random() * 0.2,
-            color: randomColor(),
-          });
-        }
-        function draw() {
-          ctx.clearRect(0, 0, width, height);
-          for (let i = 0; i < dots.length; i++) {
-            const dot = dots[i];
-            if (mouse.x !== null && mouse.y !== null) {
-              const dx = dot.x - mouse.x;
-              const dy = dot.y - mouse.y;
-              const dist = Math.sqrt(dx * dx + dy * dy);
-              if (dist < 100) {
-                const force = (100 - dist) / 100;
-                const angle = Math.atan2(dy, dx);
-                dot.vx += Math.cos(angle) * force * 0.5;
-                dot.vy += Math.sin(angle) * force * 0.5;
-              }
-            }
-            for (let j = 0; j < dots.length; j++) {
-              if (i === j) continue;
-              const other = dots[j];
-              const dx = dot.x - other.x;
-              const dy = dot.y - other.y;
-              const dist = Math.sqrt(dx * dx + dy * dy);
-              if (dist > 0 && dist < 50) {
-                const force = (50 - dist) / 25;
-                const angle = Math.atan2(dy, dx);
-                dot.vx += Math.cos(angle) * force * 0.05;
-                dot.vy += Math.sin(angle) * force * 0.05;
-              }
-            }
-            ctx.beginPath();
-            ctx.arc(dot.x, dot.y, 4.5, 0, Math.PI * 2);
-            ctx.fillStyle = dot.color;
-            ctx.fill();
-            for (let j = i + 1; j < dots.length; j++) {
-              const other = dots[j];
-              const dx = dot.x - other.x;
-              const dy = dot.y - other.y;
-              const dist = Math.sqrt(dx * dx + dy * dy);
-              if (dist < 120) {
-                ctx.beginPath();
-                ctx.moveTo(dot.x, dot.y);
-                ctx.lineTo(other.x, other.y);
-                ctx.strokeStyle = `rgba(255, 255, 255, ${1 - dist / 120})`;
-                ctx.lineWidth = 0.5;
-                ctx.stroke();
-              }
-            }
-            dot.vx *= 0.985;
-            dot.vy *= 0.985;
-            const dir = circlePoint(1, directionDeg);
-            dot.vx += dir.x * directionModifier;
-            dot.vy += dir.y * directionModifier;
-            directionDeg += directionChange;
-            dot.x += dot.vx;
-            dot.y += dot.vy;
-            if (dot.x > width + wrapBuffer) dot.x = -wrapBuffer;
-            if (dot.x < -wrapBuffer) dot.x = width + wrapBuffer;
-            if (dot.y > height + wrapBuffer) dot.y = -wrapBuffer;
-            if (dot.y < -wrapBuffer) dot.y = height + wrapBuffer;
-          }
-          const now = performance.now();
-          frameTimes.push(now);
-          if (frameTimes.length > 60) frameTimes.shift();
-          const avgFrameTime = (frameTimes[frameTimes.length - 1] - frameTimes[0]) / frameTimes.length;
-          const fps = 1000 / avgFrameTime;
-          if (fps < 50 && dots.length > 200) {
-            dots.splice(-10);
-          } else if (fps > 55 && dots.length < maxDots) {
-            for (let i = 0; i < 10; i++) {
-              dots.push({
-                x: Math.random() * width,
-                y: Math.random() * height,
-                vx: 0.3 + Math.random() * 0.2,
-                vy: -0.3 - Math.random() * 0.2,
-                color: randomColor(),
-              });
-            }
-          }
-          requestAnimationFrame(draw);
-        }
-        draw();
-      });
-    </script>
+    <script src="ball_logic.js"></script>
   </body>
 </html>
