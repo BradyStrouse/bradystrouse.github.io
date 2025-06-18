@@ -124,7 +124,7 @@ window.addEventListener("DOMContentLoaded", () => {
       // reduce dots if needed
       dots.splice(-5);
     }
-    if (fps > 59 && dots.length < 800) {
+    if (fps > 59 && dots.length < 600) {
       // add more dots if possible
       for (let i = 0; i < 5; i++) {
         dots.push({

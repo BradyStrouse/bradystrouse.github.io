@@ -65,14 +65,38 @@
             min="0"
             max=".1"
             step="0.01"
-            value="0.05"
+            value="0.01"
           />
         </label>
       </div>
     </details>
 
     <div id="info">
-      <button id="minimize-btn" onclick="toggleInfo()">−</button>
+      <div class="top-bar">
+        <button id="minimize-btn" onclick="toggleInfo()">−</button>
+        <div class="social-links">
+          <a
+            href="https://github.com/bradystrouse"
+            target="_blank"
+            aria-label="GitHub"
+          >
+            <img
+              src="https://img.icons8.com/ios11/512/FFFFFF/github.png"
+              alt="GitHub"
+            />
+          </a>
+          <a
+            href="https://linkedin.com/in/YOUR_USERNAME"
+            target="_blank"
+            aria-label="LinkedIn"
+          >
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg"
+              alt="LinkedIn"
+            />
+          </a>
+        </div>
+      </div>
       <h1>Brady Strouse — My Developer Portfolio</h1>
       <p>
         This is a space where I share ideas, thoughts, and observations about
@@ -87,9 +111,9 @@
           <strong>Mutiplayer Museum Tour Software</strong>
           <div class="project-description">
             <p>
-              This was a very unique opperturnity to help create educational
+              This was a very unique opportunity to help create educational
               software for the Grand Rapids Public Museum. I worked
-              collaboritvly on a team of about 4 people with modern tools to
+              collaboratively on a team of about 4 people with modern tools to
               create a Pokemon-Go-esque game where you go to different landmarks
               across Grand Rapids and collect items that describe the history of
               the area.
@@ -132,8 +156,8 @@
             </p>
             <p>
               The video below shows off how the game works, you are given
-              multiple objects (the yellow boncy blocks in this example) and you
-              need to try and get the ball to the green goal box
+              multiple objects (the yellow bouncy blocks in this example) and
+              you need to try and get the ball to the green goal box
             </p>
             <div class="video-wrapper">
               <video controls muted poster>
@@ -151,14 +175,14 @@
               To-Do List. Except I needed something to keep it exciting. I
               decided that I don't want to write down every step of the process,
               just type in a general idea of what I am doing. So I created a
-              To-Do List that utalizes the ChatGPT API to breakdown a general
+              To-Do List that utilizes the ChatGPT API to breakdown a general
               idea into specific tasks, as well as color coordinate seperate
               tasks.
             </p>
             <div class="video-wrapper">
-              <video controls muted poster>
+              <video controls muted>
                 <source src="To-do-list.mp4" type="video/mp4" />
-                You're browser does not support this video
+                Your browser does not support this video.
               </video>
             </div>
           </div>
