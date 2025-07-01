@@ -273,6 +273,20 @@ top-bar {
   background: black; /* fallback if video fails */
 }
 
+.auto-video video.no-controls {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.auto-video video::-webkit-media-controls {
+  display: none !important;
+}
+.auto-video video::-moz-media-controls {
+  display: none !important;
+}
+
 /* === Physics Controls === */
 #controls {
   position: fixed;
