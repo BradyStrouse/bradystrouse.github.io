@@ -35,12 +35,14 @@ window.addEventListener("DOMContentLoaded", () => {
   function explodeInfoToDots() {
     const info = document.getElementById("info");
     const rect = info.getBoundingClientRect();
-    const count = 100;
+    const middle_X = window.innerWidth/2;
+    const middle_Y = window.innerHeight/2;
+    const count = 150;
     for (let i = 0; i < count; i++) {
-      const x = rect.left + Math.random() * rect.width;
-      const y = rect.top + Math.random() * rect.height;
-      const vx = (Math.random() - 0.5) * 4;
-      const vy = (Math.random() - 0.5) * 4;
+      const x = middle_X;
+      const y = middle_Y;
+      const vx = 0;
+      const vy = 0;
       dots.push({ x, y, vx, vy, color: randomColor() });
     }
   }
@@ -70,7 +72,6 @@ window.addEventListener("DOMContentLoaded", () => {
     mouse.y = e.clientY;
   });
   window.addEventListener("resize", () => {
-    console.log("");
     const newWidth = window.innerWidth;
     const newHeight = window.innerHeight;
 
